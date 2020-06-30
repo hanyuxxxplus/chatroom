@@ -1,11 +1,11 @@
 package utils
 
 import (
+	"chatroom/common/message"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"net"
-	"project01/chat/common/message"
 )
 
 type Transfer struct {

@@ -1,7 +1,7 @@
 package main
 import (
+	"chatroom/client/process"
 	"fmt"
-	"project01/chat/client/process"
 )
 
 // 定义两个全局标量 一个用户id 一个用户密码

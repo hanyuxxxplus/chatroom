@@ -1,10 +1,10 @@
 package utils
 import (
+	"chatroom/common/message"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"net"
-	"project01/chat/common/message"
 )
 
 func ReadPkg(conn net.Conn)(mes message.Message , err error){

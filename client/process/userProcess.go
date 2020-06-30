@@ -1,11 +1,11 @@
 package process
 
 import (
+	"chatroom/client/utils"
+	"chatroom/common/message"
 	"encoding/json"
 	"fmt"
 	"net"
-	"project01/chat/client/utils"
-	"project01/chat/common/message"
 )
 
 type UserProcessor struct {
