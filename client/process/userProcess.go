@@ -43,7 +43,7 @@ func (this UserProcessor)Login(userId int, userPwd string) (err error) {
 
 	// 5、将数据赋值给data
 	mes.Data = string(data)
-
+	fmt.Println(mes.Data)
 	// 6、将mes 序列化
 	data , err = json.Marshal(mes)
 	if err != nil {
@@ -76,6 +76,7 @@ func (this UserProcessor)Login(userId int, userPwd string) (err error) {
 	ts := &utils.Transfer{
 		Conn: conn,
 	}
+
 	err = ts.WritePkg(data)
 	if err != nil {
 		return
@@ -94,7 +95,13 @@ func (this UserProcessor)Login(userId int, userPwd string) (err error) {
 	}
 
 	if loginResMes.Code == 200{
-		fmt.Println("登录成功")
+		// 在客户端启动一个协程
+		// 该协程用来保持和服务器端的通讯
+		// 如果服务器端有消息推送给客户端，则接收并显示
+		go serverProcessMes(conn)
+		for{
+			ShowMenu()
+		}
 	}else if loginResMes.Code == 500 {
 		fmt.Println(loginResMes.Error)
 	}

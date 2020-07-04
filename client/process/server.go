@@ -1,7 +1,9 @@
 package process
 
 import (
+	"chatroom/client/utils"
 	"fmt"
+	"net"
 	"os"
 )
 
@@ -23,8 +25,29 @@ func ShowMenu(){
 	case 3:
 		fmt.Println("信息列表")
 	case 4:
-		fmt.Println("推出系统")
+		fmt.Println("退出系统")
 		os.Exit(0)
 	}
 
+}
+
+
+func serverProcessMes(conn net.Conn){
+	// 创建一个transfer实例，不停的读取服务器推送的消息
+	tf := &utils.Transfer{
+		Conn: conn,
+	}
+
+	for  {
+		fmt.Printf("客户端正在等待读取服务器端的消息")
+		mes , err := tf.ReadPkg()
+		if err != nil {
+			fmt.Println("tf.readPkg err = ",err)
+			return
+		}
+		// 读取到消息则是下一步的处理逻辑
+
+		fmt.Println(mes)
+
+	}
 }
