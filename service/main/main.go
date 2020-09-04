@@ -1,8 +1,11 @@
 package main
 
 import (
+	"chatroom/service/model"
+	"chatroom/service/process"
 	"fmt"
 	"net"
+	"time"
 )
 
 // 处理和客户端的通讯
@@ -26,7 +29,18 @@ func doProcess(conn net.Conn){
 	}
 }
 
+func mainInit(){
+	initPool("localhost:6379",8,0,300 * time.Second)
+	initUserDao()
+	process.InitUserManager()
+}
+
+func initUserDao(){
+	model.MyUserDao = model.NewUserDao(pool)
+}
+
 func main(){
+	mainInit()
 	fmt.Println("服务器8889")
 	listen, err := net.Listen("tcp","0.0.0.0:8889")
 	if err != nil {

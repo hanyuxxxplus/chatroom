@@ -1,10 +1,13 @@
 package message
 
+import "chatroom/service/model"
 // 确定消息的值
 const (
 	LoginMesType = "loginMes"
 	LoginResMesType = "loginResMes"
 	RegisterMesType = "registerMes"
+	RegisterResMessageType = "registerResMessage"
+	NotifyUserStatusMesType = "notifyUserStatusMes"
 )
 
 type Message struct {
@@ -22,11 +25,22 @@ type LoginMessage struct {
 // 登录返回的消息
 type LoginResMessage struct {
 	Code int `json:"code"`// 状态码 500：表示该用户未注册  200：表示登录成功
+	OnlineUserList []int `json:"onlineUserList"` // 在线用户列表
 	Error string `json:"error"`// 错误信息
 }
 
 
 // 注册返回的消息
 type RegisterMessage struct {
+	User model.User `json:"user"`
+}
 
+type RegisterResMessage struct {
+	Code int `json:"code"`// 状态码 400：表示该用户已注册  200：表示注册成功
+	Error string `json:"error"`// 错误信息
+}
+
+type NotifyUserStatusMes struct {
+	UserId int `json:"userId"`
+	Status int `json:"status"`
 }

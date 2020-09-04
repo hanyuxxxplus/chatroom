@@ -7,7 +7,7 @@ import (
 // 定义两个全局标量 一个用户id 一个用户密码
 var userId int
 var userPwd string
-
+var userName string
 func main(){
 	var key int
 	var loop bool= true
@@ -31,11 +31,23 @@ func main(){
 			up := process.UserProcessor{}
 			err := up.Login(userId,userPwd)
 			if err != nil {
-				fmt.Println(err)
+				fmt.Println("main:",err)
 			}
 		case 2:
-			fmt.Println("注册用户")
-			loop = false
+			fmt.Println("请输入用户ID")
+			fmt.Scanln(&userId)
+			fmt.Println("请输入用户密码")
+			fmt.Scanln(&userPwd)
+			fmt.Println("请输入用户昵称")
+			fmt.Scanln(&userName)
+			// 完成登录
+			up := process.UserProcessor{}
+			err := up.Register(userId,userPwd,userName)
+			if err != nil {
+				fmt.Println("main:",err)
+			}else{
+				fmt.Println("注册成功，请重新登录")
+			}
 		case 3:
 			fmt.Println("推出系统")
 			loop = false

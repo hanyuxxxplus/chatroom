@@ -23,7 +23,11 @@ func (this *Processor)serverProcessMes(mes *message.Message)(err error){
 		}
 		err = up.ServerProcessLogin(mes)
 	case message.RegisterMesType:// 处理注册的逻辑
-
+		// 创建一个userProcessor实例
+		up := &process.UserProcessor{
+			Conn: this.Conn,
+		}
+		err = up.ServerProcessRegister(mes)
 	default:
 		fmt.Println("消息类型不存在")
 	}
