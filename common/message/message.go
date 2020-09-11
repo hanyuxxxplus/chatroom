@@ -1,6 +1,6 @@
 package message
 
-import "chatroom/service/model"
+import "chatroom/common/model"
 // 确定消息的值
 const (
 	LoginMesType = "loginMes"
@@ -8,6 +8,7 @@ const (
 	RegisterMesType = "registerMes"
 	RegisterResMessageType = "registerResMessage"
 	NotifyUserStatusMesType = "notifyUserStatusMes"
+	SmsMesType = "smsMesType"
 )
 
 type Message struct {
@@ -43,4 +44,9 @@ type RegisterResMessage struct {
 type NotifyUserStatusMes struct {
 	UserId int `json:"userId"`
 	Status int `json:"status"`
+}
+
+type SmsMessage struct {
+	Content string `json:"content"`
+	FromUserId int `json:"fromUserId"`
 }

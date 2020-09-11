@@ -173,10 +173,16 @@ func (this *UserProcessor)Login(userId int, userPwd string) (err error) {
 		// 在客户端启动一个协程
 		// 该协程用来保持和服务器端的通讯
 		// 如果服务器端有消息推送给客户端，则接收并显示
-		for k,v := range loginResMes.OnlineUserList {
-			fmt.Printf("在线用户 %d : %d\n",k,v)
+		for _,v := range loginResMes.OnlineUserList {
+			if v == userId {
+				continue
+			}
+			updateUserStatus(v,model.UserOnline)
 		}
-		fmt.Println()
+		CUser.Conn = conn
+		CUser.UserId = userId
+		CUser.UserStatus = model.UserOnline
+		showOnlineUser()
 		go serverProcessMes(conn)
 		for{
 			ShowMenu()

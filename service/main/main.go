@@ -42,7 +42,7 @@ func initUserDao(){
 func main(){
 	mainInit()
 	fmt.Println("服务器8889")
-	listen, err := net.Listen("tcp","0.0.0.0:8889")
+	listen, err := net.Listen("tcp","localhost:8889")
 	if err != nil {
 		fmt.Println("new.listen err = ",err)
 		return

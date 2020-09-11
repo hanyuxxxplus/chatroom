@@ -2,6 +2,8 @@ package process
 
 import (
 	"chatroom/client/utils"
+	"chatroom/common/message"
+	"encoding/json"
 	"fmt"
 	"net"
 	"os"
@@ -16,12 +18,18 @@ func ShowMenu(){
 	fmt.Println("请选择 1~4：")
 	var key int
 	fmt.Scanln(&key)
-
+	var content string
 	switch key {
 	case 1:
-		fmt.Println("显示用户列表")
+		showOnlineUser()
 	case 2:
-		fmt.Println("发送消息")
+		fmt.Println("请输入要发送的消息")
+		fmt.Scanln(&content)
+		smsProcessor := SmsProcess{}
+		err := smsProcessor.sendGroupMes(content)
+		if err != nil {
+			fmt.Println(err)
+		}
 	case 3:
 		fmt.Println("信息列表")
 	case 4:
@@ -46,8 +54,27 @@ func serverProcessMes(conn net.Conn){
 			return
 		}
 		// 读取到消息则是下一步的处理逻辑
-
-		fmt.Println(mes)
+		switch mes.Type {
+		case message.NotifyUserStatusMesType:
+			var notifyMes message.NotifyUserStatusMes
+			err = json.Unmarshal([]byte(mes.Data),&notifyMes)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			updateUserStatus(notifyMes.UserId,notifyMes.Status)
+			showOnlineUser()
+		case message.SmsMesType:
+			var smsMes message.SmsMessage
+			err = json.Unmarshal([]byte(mes.Data),&smsMes)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			ShowSmsResMes(&smsMes)
+		default:
+			fmt.Println("无法识别的类型")
+		}
 
 	}
 }

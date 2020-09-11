@@ -28,6 +28,9 @@ func (this *Processor)serverProcessMes(mes *message.Message)(err error){
 			Conn: this.Conn,
 		}
 		err = up.ServerProcessRegister(mes)
+	case message.SmsMesType:
+		sp := &process.SmsProcess{}
+		sp.SendMessageToOnlineUser(mes)
 	default:
 		fmt.Println("消息类型不存在")
 	}

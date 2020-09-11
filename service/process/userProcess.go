@@ -27,7 +27,6 @@ func (this *UserProcessor)ServerProcessLogin(mes *message.Message)(err error){
 	var loginResMes message.LoginResMessage
 
 	user, err := model.MyUserDao.UserLogin(loginMes.UserId,loginMes.UserPwd)
-
 	// 声明一个loginMes
 	if err != nil {
 		loginResMes.Code = 500
@@ -35,6 +34,10 @@ func (this *UserProcessor)ServerProcessLogin(mes *message.Message)(err error){
 	}else{
 		loginResMes.Code = 200
 		Umg.AddUserOnline(user.UserId,this)
+		// 将在线用户返回给登录用户
+		for k , _ := range Umg.userList {
+			loginResMes.OnlineUserList = append(loginResMes.OnlineUserList,k)
+		}
 		// TODO 通知其他用户该用户上线事件，应该可以放到协程中去完成
 		this.NotifyOtherUsers(user.UserId , model.UserOnline)
 	}
@@ -65,13 +68,13 @@ func (this *UserProcessor) NotifyOtherUsers(userId int , status int){
 			continue
 		}
 
-		this.NotifyUserStatus(k , status)
+		this.NotifyUserStatus(k , status, userId)
 	}
 }
 
-func (this *UserProcessor) NotifyUserStatus(userId int, status int) {
+func (this *UserProcessor) NotifyUserStatus(userId int, status int, onlineUserId int) {
 	var notifyUserStatusMes message.NotifyUserStatusMes
-	notifyUserStatusMes.UserId = userId
+	notifyUserStatusMes.UserId = onlineUserId
 	notifyUserStatusMes.Status = status
 
 	 data , err  := json.Marshal(notifyUserStatusMes)
@@ -89,9 +92,8 @@ func (this *UserProcessor) NotifyUserStatus(userId int, status int) {
 	 if err != nil {
 		 return
 	 }
-
 	transfer := &utils.Transfer{
-		Conn: this.Conn,
+		Conn: Umg.userList[userId].Conn,
 	}
 
 	err = transfer.WritePkg(data)

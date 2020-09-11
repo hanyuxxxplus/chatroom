@@ -1,5 +1,11 @@
 package model
 
+const (
+	UserOnline = iota
+	UserOffLine
+	UserBusy
+)
+
 // 定义一个用户的结构体
 type User struct {
 	// 为了保证反序列化的成功
@@ -7,4 +13,5 @@ type User struct {
 	UserId int `json:"userId"`
 	UserPwd string `json:"userPwd"`
 	UserName string `json:"userName"`
+	UserStatus int `json:"userStatus"`
 }
