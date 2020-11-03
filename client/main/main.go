@@ -12,7 +12,7 @@ func main(){
 	var key int
 	var loop bool= true
 	for{
-		fmt.Println("---------------欢迎登录多人聊天系统---------------")
+		fmt.Println("---------------1欢迎登录多人聊天系统---------------")
 		fmt.Printf("\t\t\t 1、登录聊天室\n")
 		fmt.Printf("\t\t\t 2、注册用户\n")
 		fmt.Printf("\t\t\t 3、推出系统\n")
